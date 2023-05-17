@@ -73,7 +73,7 @@ class CommentViewSet(ModelViewSet):
 
 
 class FollowViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                    mixins.DestroyModelMixin, GenericViewSet):
+                    GenericViewSet):
     serializer_class = FollowSerializer
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
