@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.conf import settings
 
 User = get_user_model()
 
@@ -17,7 +18,7 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return self.text
+        return self.text[:settings.COUNT_CHAR_POST_STR]
 
 
 class Group(models.Model):
@@ -37,6 +38,14 @@ class Comment(models.Model):
     text = models.TextField()
     created = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = 'comment'
+        verbose_name_plural = 'comments'
+
+    def __str__(self):
+        return self.text
 
 
 class Follow(models.Model):

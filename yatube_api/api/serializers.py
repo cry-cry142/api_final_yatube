@@ -3,6 +3,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.exceptions import ValidationError
 
 
 from posts.models import Comment, Post, Group, Follow, User
@@ -53,8 +54,13 @@ class FollowSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(), slug_field='username'
     )
 
+    def validate_following(self, value):
+        if self.context['request'].user == value:
+            raise ValidationError('Вы не можете подписаться на себя.')
+        return value
+
     class Meta:
-        fields = ('user', 'following')
+        fields = ('id', 'user', 'following')
         model = Follow
 
         validators = [
